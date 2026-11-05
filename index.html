@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Бамбуковый дом — китайская кухня</title>
+  <meta name="description" content="Сеть ресторанов китайской кухни: лапша, димсамы, вок. Меню, адреса и часы работы.">
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Один иероглиф для красной печати в шапке: грузится только он -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E5%91%B3" rel="stylesheet">
+ 
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+ 
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="#top">Бамбуковый дом</a>
+      <button class="burger" type="button" aria-label="Открыть меню сайта" aria-expanded="false" aria-controls="nav"><span></span></button>
+      <nav class="nav" id="nav" aria-label="Основная навигация">
+        <a href="#menu">Меню</a>
+        <a href="#locations">Рестораны</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+ 
+  <main id="top">
+ 
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-text">
+          <h1>Китайская кухня, которую готовят на огне и подают горячей</h1>
+          <p>Лапша ручной вытяжки, димсамы на пару и вок из открытой кухни. Заходите в любой из наших ресторанов.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#menu">Смотреть меню</a>
+            <a class="btn btn-ghost" href="#locations">Найти ресторан</a>
+          </div>
+        </div>
+        <div class="seal" aria-hidden="true">味</div>
+      </div>
+    </section>
+ 
+    <section class="menu" id="menu">
+      <div class="wrap">
+        <h2>Меню</h2>
+        <p class="lead">Выберите раздел, чтобы посмотреть блюда и цены.</p>
+        <div class="tabs" id="tabs"></div>
+        <ul class="dishes" id="dishes"></ul>
+      </div>
+    </section>
+ 
+    <section class="locations" id="locations">
+      <div class="wrap">
+        <h2>Наши рестораны</h2>
+        <p class="lead">Адреса, часы работы и телефоны.</p>
+        <ul class="places" id="places"></ul>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <footer class="footer" id="contacts">
+    <div class="wrap footer-grid">
+      <div>
+        <p class="footer-title">Бамбуковый дом</p>
+        <p>Китайская кухня для всей семьи.</p>
+      </div>
+      <div>
+        <p class="footer-title">Связаться с нами</p>
+        <p><a href="tel:+70000000000">+7 000 000 00 00</a></p>
+        <p><a href="mailto:info@example.com">info@example.com</a></p>
+      </div>
+      <div>
+        <p class="footer-title">Мы в соцсетях</p>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Telegram</a></p>
+      </div>
+    </div>
+    <div class="wrap copyright">© <span id="year"></span> Бамбуковый дом</div>
+  </footer>
+ 
+</body>
+</html>
