@@ -1,88 +1,116 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Меллстрой дом — китайская кухня</title>
-  <meta name="description" content="Сеть ресторанов китайской кухни: лапша, димсамы, вок. Меню, адреса и часы работы.">
- 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
-  <!-- Один иероглиф для красной печати в шапке: грузится только он -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E5%91%B3" rel="stylesheet">
- 
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura — сеть парикмахерских</title>
+<meta name="description" content="Aura — сеть парикмахерских: стрижки, окрашивание, укладки и уход. Онлайн-запись.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
- 
-  <header class="site-header">
-    <div class="wrap">
-      <a class="logo" href="#top">Меллстрой дом</a>
-      <button class="burger" type="button" aria-label="Открыть меню сайта" aria-expanded="false" aria-controls="nav"><span></span></button>
-      <nav class="nav" id="nav" aria-label="Основная навигация">
-        <a href="#menu">Меню</a>
-        <a href="#locations">Рестораны</a>
-        <a href="#contacts">Контакты</a>
-      </nav>
-    </div>
-  </header>
- 
-  <main id="top">
- 
-    <section class="hero">
-      <div class="wrap">
-        <div class="hero-text">
-          <h1>Китайская кухня, которую готовят на огне и подают горячей</h1>
-          <p>Лапша ручной вытяжки, димсамы на пару и вок из открытой кухни. Заходите в любой из наших ресторанов.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#menu">Смотреть меню</a>
-            <a class="btn btn-ghost" href="#locations">Найти ресторан</a>
-          </div>
-        </div>
-        <div class="seal" aria-hidden="true">味</div>
-      </div>
-    </section>
- 
-    <section class="menu" id="menu">
-      <div class="wrap">
-        <h2>Меню</h2>
-        <p class="lead">Выберите раздел, чтобы посмотреть блюда и цены.</p>
-        <div class="tabs" id="tabs"></div>
-        <ul class="dishes" id="dishes"></ul>
-      </div>
-    </section>
- 
-    <section class="locations" id="locations">
-      <div class="wrap">
-        <h2>Наши рестораны</h2>
-        <p class="lead">Адреса, часы работы и телефоны.</p>
-        <ul class="places" id="places"></ul>
-      </div>
-    </section>
- 
-  </main>
- 
-  <footer class="footer" id="contacts">
-    <div class="wrap footer-grid">
-      <div>
-        <p class="footer-title">Меллстрой дом</p>
-        <p>Китайская кухня для всей семьи.</p>
-      </div>
-      <div>
-        <p class="footer-title">Связаться с нами</p>
-        <p><a href="tel:+70000000000">+7 000 000 00 00</a></p>
-        <p><a href="mailto:info@example.com">info@example.com</a></p>
-      </div>
-      <div>
-        <p class="footer-title">Мы в соцсетях</p>
-        <p><a href="#">Instagram</a></p>
-        <p><a href="#">Telegram</a></p>
+<div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="header" id="header">
+  <a href="#top" class="logo"><span class="logo-mark">✂</span> Aura</a>
+  <nav class="nav">
+    <a href="#services">Услуги</a>
+    <a href="#stats">О нас</a>
+    <a href="#salons">Салоны</a>
+  </nav>
+  <div class="auth-box">
+    <span class="hello" id="hello" hidden></span>
+    <button class="btn btn-ghost" id="authBtn">Войти</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Сеть парикмахерских</p>
+      <h1>Стиль, который <span class="grad">оживает</span> в ваших волосах</h1>
+      <p class="lead">Опытные мастера, мягкий уход и атмосфера, в которую хочется возвращаться. Запишитесь онлайн за минуту.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="bookBtn">Записаться</button>
+        <a class="btn btn-ghost" href="#services">Наши услуги</a>
       </div>
     </div>
-    <div class="wrap copyright">© <span id="year"></span> Меллстрой дом</div>
-  </footer>
- 
+    <div class="orb" aria-hidden="true">
+      <svg viewBox="0 0 200 200" class="scissors">
+        <g class="piece p1"><path class="blade" d="M92 100 L100 4 L108 100Z"/><path class="stem" d="M100 100V152"/><circle class="ring" cx="100" cy="170" r="17"/></g>
+        <g class="piece p2"><path class="blade" d="M92 100 L100 4 L108 100Z"/><path class="stem" d="M100 100V152"/><circle class="ring" cx="100" cy="170" r="17"/></g>
+        <circle class="pin" cx="100" cy="100" r="6"/>
+      </svg>
+      <i class="sp s1">✦</i><i class="sp s2">✦</i><i class="sp s3">✦</i><i class="sp s4">✦</i>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>Стрижки</span><span>Окрашивание</span><span>Укладки</span><span>Уход</span><span>Барбершоп</span><span>Свадебные причёски</span>
+      <span>Стрижки</span><span>Окрашивание</span><span>Укладки</span><span>Уход</span><span>Барбершоп</span><span>Свадебные причёски</span>
+    </div>
+  </div>
+
+  <section class="section" id="services">
+    <h2 data-reveal>Наши услуги</h2>
+    <div class="grid cards">
+      <article class="card" data-reveal style="--d:.05s"><div class="ico">✂️</div><h3>Стрижки</h3><p>Женские, мужские и детские стрижки с подбором формы под ваш тип лица.</p></article>
+      <article class="card" data-reveal style="--d:.15s"><div class="ico">🎨</div><h3>Окрашивание</h3><p>Блонд, airtouch, мелирование и бережное тонирование без вреда для волос.</p></article>
+      <article class="card" data-reveal style="--d:.25s"><div class="ico">💫</div><h3>Укладки</h3><p>Повседневные и вечерние укладки, свадебные и праздничные причёски.</p></article>
+      <article class="card" data-reveal style="--d:.35s"><div class="ico">🌿</div><h3>Уход</h3><p>Восстановление, ботокс и кератин — блеск и гладкость надолго.</p></article>
+    </div>
+  </section>
+
+  <section class="section stats" id="stats">
+    <div class="grid four">
+      <div class="stat" data-reveal style="--d:.05s"><b class="num" data-count="12">0</b><span>салонов в городе</span></div>
+      <div class="stat" data-reveal style="--d:.15s"><b class="num" data-count="85">0</b><span>мастеров</span></div>
+      <div class="stat" data-reveal style="--d:.25s"><b class="num" data-count="25000" data-suf="+">0</b><span>довольных клиентов</span></div>
+      <div class="stat" data-reveal style="--d:.35s"><b class="num" data-count="9">0</b><span>лет на рынке</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="salons">
+    <h2 data-reveal>Наши салоны</h2>
+    <div class="grid three">
+      <article class="card salon" data-reveal style="--d:.05s"><div class="pin-ico">📍</div><h3>Aura Центр</h3><p>ул. Центральная, 10<br>Ежедневно 9:00–21:00<br>+7 (000) 000-00-01</p></article>
+      <article class="card salon" data-reveal style="--d:.15s"><div class="pin-ico">📍</div><h3>Aura Север</h3><p>пр. Северный, 25<br>Ежедневно 9:00–21:00<br>+7 (000) 000-00-02</p></article>
+      <article class="card salon" data-reveal style="--d:.25s"><div class="pin-ico">📍</div><h3>Aura Парк</h3><p>ул. Парковая, 7<br>Ежедневно 10:00–20:00<br>+7 (000) 000-00-03</p></article>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">© 2026 Aura — сеть парикмахерских</footer>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="close" data-close aria-label="Закрыть">×</button>
+    <h2 id="mTitle">Добро пожаловать</h2>
+    <div class="tabs" data-active="login">
+      <span class="tab-ind"></span>
+      <button class="tab active" type="button" data-tab="login">Вход</button>
+      <button class="tab" type="button" data-tab="register">Регистрация</button>
+    </div>
+    <div class="forms">
+      <form class="form active" id="loginForm" data-f="login" novalidate>
+        <div class="field"><input name="email" type="email" placeholder=" " autocomplete="email"><label>Email</label><small class="err"></small></div>
+        <div class="field"><input name="password" type="password" placeholder=" " autocomplete="current-password"><label>Пароль</label><small class="err"></small></div>
+        <button class="btn btn-primary wide" type="submit">Войти</button>
+      </form>
+      <form class="form" id="regForm" data-f="register" novalidate inert>
+        <div class="field"><input name="fullname" type="text" placeholder=" " autocomplete="name"><label>Имя</label><small class="err"></small></div>
+        <div class="field"><input name="email" type="email" placeholder=" " autocomplete="email"><label>Email</label><small class="err"></small></div>
+        <div class="field"><input name="password" type="password" placeholder=" " autocomplete="new-password"><label>Пароль</label><div class="meter"><i></i></div><small class="err"></small></div>
+        <div class="field"><input name="confirm" type="password" placeholder=" " autocomplete="new-password"><label>Повторите пароль</label><small class="err"></small></div>
+        <button class="btn btn-primary wide" type="submit">Создать аккаунт</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="script.js"></script>
 </body>
 </html>
