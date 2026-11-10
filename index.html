@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MellHairCut — сеть парикмахерских</title>
+<title>Aura — сеть парикмахерских</title>
 <meta name="description" content="Aura — сеть парикмахерских: стрижки, окрашивание, укладки и уход. Онлайн-запись.">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="style.css">
@@ -12,9 +12,10 @@
 <div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
 
 <header class="header" id="header">
-  <a href="#top" class="logo"><span class="logo-mark">✂</span> MellHairCut</a>
+  <a href="#top" class="logo"><span class="logo-mark">✂</span> Aura</a>
   <nav class="nav">
     <a href="#services">Услуги</a>
+    <a href="#cuts">Стрижки</a>
     <a href="#stats">О нас</a>
     <a href="#salons">Салоны</a>
   </nav>
@@ -62,6 +63,24 @@
     </div>
   </section>
 
+  <section class="section" id="cuts">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="face" viewBox="0 0 120 140"><path class="cloth" d="M8 140Q60 98 112 140Z"/><rect class="skin" x="50" y="92" width="20" height="26" rx="8"/><ellipse class="skin" cx="60" cy="66" rx="26" ry="32"/></symbol></svg>
+    <h2 data-reveal>Популярные стрижки</h2>
+    <div class="chips" data-reveal>
+      <button class="chip active" data-f="all">Все</button>
+      <button class="chip" data-f="w">Женские</button>
+      <button class="chip" data-f="m">Мужские</button>
+    </div>
+    <div class="grid cuts">
+      <article class="card cut" data-g="w" data-reveal style="--d:.05s;--h:#b0503c"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Боб"><use href="#face" width="120" height="140"/><path class="hair" d="M26 78Q20 24 60 22Q100 24 94 78L94 100Q78 106 74 94L74 56Q60 42 46 56L46 94Q42 106 26 100Z"/></svg></div><h3>Боб</h3><p>Чёткий силуэт до подбородка, подходит к любой густоте волос.</p></article>
+      <article class="card cut" data-g="w" data-reveal style="--d:.12s;--h:#e0b45a"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Пикси"><use href="#face" width="120" height="140"/><path class="hair" d="M32 64Q28 26 62 24Q96 26 88 60Q80 44 66 46Q52 40 32 64Z"/></svg></div><h3>Пикси</h3><p>Дерзкая короткая стрижка, которая открывает лицо и скулы.</p></article>
+      <article class="card cut" data-g="w" data-reveal style="--d:.19s;--h:#5b3a8c"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Каскад"><use href="#face" width="120" height="140"/><path class="hair" d="M24 84Q14 24 60 22Q106 24 96 84L104 126Q88 132 84 112L76 60Q60 44 44 60L36 112Q32 132 16 126Z"/></svg></div><h3>Каскад</h3><p>Многослойная стрижка по длине: объём без потери длины.</p></article>
+      <article class="card cut" data-g="m" data-reveal style="--d:.26s;--h:#2a2020"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Фейд"><use href="#face" width="120" height="140"/><path class="hair" d="M38 54Q36 28 60 28Q84 28 82 54Q72 42 60 42Q48 42 38 54Z"/><path class="hair fade" d="M33 66Q31 52 38 54L40 72ZM87 66Q89 52 82 54L80 72Z"/></svg></div><h3>Фейд</h3><p>Плавный переход от почти нуля на висках к длине сверху.</p></article>
+      <article class="card cut" data-g="m" data-reveal style="--d:.33s;--h:#8a5a3b"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Андеркат"><use href="#face" width="120" height="140"/><path class="hair" d="M34 56Q30 18 66 18Q96 22 86 54Q76 36 58 42Q44 40 34 56Z"/><path class="hair fade" d="M33 66Q31 52 38 54L40 72ZM87 66Q89 52 82 54L80 72Z"/></svg></div><h3>Андеркат</h3><p>Выбритые виски и длинная верхняя часть для укладки.</p></article>
+      <article class="card cut" data-g="m" data-reveal style="--d:.4s;--h:#4a3a30"><div class="cut-img"><svg viewBox="0 0 120 140" role="img" aria-label="Классика"><use href="#face" width="120" height="140"/><path class="hair" d="M32 64Q30 28 62 26Q92 28 88 64Q84 42 70 40Q56 46 44 40Q36 48 32 64Z"/></svg></div><h3>Классика</h3><p>Аккуратная мужская стрижка с боковым пробором на каждый день.</p></article>
+    </div>
+  </section>
+
   <section class="section stats" id="stats">
     <div class="grid four">
       <div class="stat" data-reveal style="--d:.05s"><b class="num" data-count="12">0</b><span>салонов в городе</span></div>
@@ -81,7 +100,7 @@
   </section>
 </main>
 
-<footer class="footer">© 2026 MellHairCut — сеть парикмахерских</footer>
+<footer class="footer">© 2026 Aura — сеть парикмахерских</footer>
 
 <div class="modal" id="modal" aria-hidden="true">
   <div class="modal-bg" data-close></div>
