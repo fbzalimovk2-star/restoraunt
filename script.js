@@ -8,6 +8,56 @@
     set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
 
+  // === Supabase: лёгкий вариант без библиотеки, через REST ===
+  // Вставьте данные проекта (Project Settings → API). Пока пусто — работает демо на localStorage.
+  const SUPABASE_URL = '';  // например https://xxxx.supabase.co
+  const SUPABASE_KEY = '';  // anon / publishable key (НЕ service_role!)
+  const useSb = !!(SUPABASE_URL && SUPABASE_KEY);
+
+  async function sb(path, body, token) {
+    const r = await fetch(SUPABASE_URL + '/auth/v1/' + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, ...(token && { Authorization: 'Bearer ' + token }) },
+      body: JSON.stringify(body || {})
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.msg || d.error_description || d.message || 'Ошибка сервера');
+    return d;
+  }
+
+  const auth = {
+    async login(email, pass) {
+      if (useSb) {
+        const d = await sb('token?grant_type=password', { email, password: pass });
+        const m = (d.user && d.user.user_metadata) || {};
+        return { name: m.name || email.split('@')[0], email, token: d.access_token };
+      }
+      const u = ls.get('aura_users', []).find(u => u.email === email);
+      if (!u || u.hash !== await hash(pass, email)) throw new Error('Invalid login credentials');
+      return u;
+    },
+    async register(name, email, pass) {
+      if (useSb) {
+        const d = await sb('signup', { email, password: pass, data: { name } });
+        return d.access_token ? { name, email, token: d.access_token } : null; // null = нужно подтвердить email
+      }
+      const users = ls.get('aura_users', []);
+      if (users.some(u => u.email === email)) throw new Error('User already registered');
+      const u = { name, email, hash: await hash(pass, email) };
+      ls.set('aura_users', [...users, u]);
+      return u;
+    },
+    logout(s) { if (useSb && s.token) sb('logout', null, s.token).catch(() => {}); }
+  };
+
+  const ruErr = m =>
+    /invalid login/i.test(m) ? 'Неверный email или пароль' :
+    /already/i.test(m) ? 'Этот email уже зарегистрирован' :
+    /not confirmed/i.test(m) ? 'Сначала подтвердите email по ссылке из письма' :
+    /password/i.test(m) ? 'Пароль слишком простой' :
+    /fetch|network/i.test(m) ? 'Нет связи с сервером' : m;
+  const busy = (f, on) => { $('[type=submit]', f).disabled = on; };
+
   async function hash(pass, salt) {
     const str = salt + ':' + pass;
     if (window.crypto && crypto.subtle) {
@@ -66,7 +116,7 @@
     $('#authBtn').textContent = s ? 'Выйти' : 'Войти';
   }
   function finish(u, isNew) {
-    ls.set('aura_session', { name: u.name, email: u.email });
+    ls.set('aura_session', { name: u.name, email: u.email, token: u.token });
     closeModal();
     $$('.form').forEach(f => f.reset());
     $('.meter').style.setProperty('--s', 0);
@@ -82,9 +132,10 @@
     let bad = err(q('email'), okEmail(email) ? '' : 'Введите корректный email');
     bad = err(q('password'), q('password').value ? '' : 'Введите пароль') || bad;
     if (!bad) {
-      const u = ls.get('aura_users', []).find(u => u.email === email);
-      if (u && u.hash === await hash(q('password').value, email)) return finish(u, false);
-      err(q('password'), 'Неверный email или пароль');
+      busy(f, true);
+      try { return finish(await auth.login(email, q('password').value), false); }
+      catch (x) { err(q('password'), ruErr(x.message)); }
+      finally { busy(f, false); }
     }
     shake(f);
   });
@@ -101,11 +152,17 @@
       err(q('confirm'), q('confirm').value === p ? '' : 'Пароли не совпадают')
     ].some(Boolean);
     if (bad) return shake(f);
-    const users = ls.get('aura_users', []);
-    if (users.some(u => u.email === email)) { err(q('email'), 'Этот email уже зарегистрирован'); return shake(f); }
-    const u = { name, email, hash: await hash(p, email) };
-    ls.set('aura_users', [...users, u]);
-    finish(u, true);
+    busy(f, true);
+    try {
+      const u = await auth.register(name, email, p);
+      if (u) return finish(u, true);
+      closeModal(); f.reset();
+      toast('Мы отправили письмо — подтвердите email и войдите');
+    } catch (x) {
+      const m = ruErr(x.message);
+      err(/зарегистр/.test(m) ? q('email') : q('password'), m);
+      shake(f);
+    } finally { busy(f, false); }
   });
 
   // Индикатор надёжности пароля
@@ -120,7 +177,8 @@
 
   // Кнопки
   $('#authBtn').addEventListener('click', () => {
-    if (ls.get('aura_session')) { ls.set('aura_session', null); updateUI(); toast('Вы вышли из аккаунта'); }
+    const s = ls.get('aura_session');
+    if (s) { auth.logout(s); ls.set('aura_session', null); updateUI(); toast('Вы вышли из аккаунта'); }
     else openModal('login');
   });
   $('#bookBtn').addEventListener('click', () => {
@@ -143,6 +201,16 @@
     if (e.target.dataset.count) count(e.target);
   }), { threshold: .2 });
   $$('[data-reveal],[data-count]').forEach(el => io.observe(el));
+
+  // Фильтр стрижек
+  $$('.chip').forEach(c => c.addEventListener('click', () => {
+    $$('.chip').forEach(x => x.classList.toggle('active', x === c));
+    $$('.cut').forEach(el => {
+      const show = c.dataset.f === 'all' || el.dataset.g === c.dataset.f;
+      el.hidden = !show;
+      if (show) { el.classList.remove('in'); void el.offsetWidth; el.classList.add('in'); }
+    });
+  }));
 
   const header = $('#header');
   addEventListener('scroll', () => header.classList.toggle('sc', scrollY > 20), { passive: true });
