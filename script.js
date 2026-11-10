@@ -1,140 +1,151 @@
-"use strict";
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-/* =====================================================
-   ВАШИ ДАННЫЕ — меняйте только этот блок.
-   Всё ниже (меню, рестораны) на сайте собирается отсюда.
-   ===================================================== */
-
-// Валюта в ценах: "₸", "₽", "$" и т.д.
-const CURRENCY = "₸";
-
-// Меню: разделы -> блюда. Сейчас тут примеры, замените на свои.
-const MENU = {
-  "Лапша": [
-    { name: "Удон с курицей", desc: "Пшеничная лапша, курица, овощи, соус терияки", price: 2900 },
-    { name: "Лагман по-китайски", desc: "Лапша ручной вытяжки, говядина, перец, зелень", price: 3200 },
-    { name: "Рисовая лапша с креветками", desc: "Креветки, яйцо, ростки фасоли, арахис", price: 3500 }
-  ],
-  "Димсамы": [
-    { name: "Сяолунбао", desc: "Паровые пельмени с бульоном и свининой, 5 шт.", price: 2400 },
-    { name: "Гёдза с курицей", desc: "Обжаренные пельмени, соус понзу, 6 шт.", price: 2200 }
-  ],
-  "Вок": [
-    { name: "Курица кунг-пао", desc: "Курица, арахис, сушёный перец чили", price: 3600 },
-    { name: "Говядина с овощами", desc: "Говядина, болгарский перец, брокколи, устричный соус", price: 4100 }
-  ],
-  "Напитки": [
-    { name: "Зелёный чай", desc: "Чайник на двоих", price: 1200 },
-    { name: "Домашний лимонад", desc: "Лимон, имбирь, мёд", price: 1400 }
-  ]
-};
-
-// Рестораны. open/close — часы работы, tz — часовой пояс ресторана.
-const LOCATIONS = [
-  { name: "Меллстрой дом — Центр", address: "ул. Центральная, 1", phone: "+7 000 000 00 01", open: "10:00", close: "23:00", tz: "Asia/Almaty" },
-  { name: "Меллстрой дом — Северный", address: "пр. Мира, 25", phone: "+7 000 000 00 02", open: "11:00", close: "22:00", tz: "Asia/Almaty" }
-];
-
-/* ================= Дальше код, его можно не трогать ================= */
-
-const $ = (selector) => document.querySelector(selector);
-
-// Создаёт элемент; текст вставляется безопасно (textContent).
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
-const formatPrice = (n) => n.toLocaleString("ru-RU") + "\u00A0" + CURRENCY;
-
-/* ---------- Меню ---------- */
-const tabsBox = $("#tabs");
-const dishesBox = $("#dishes");
-
-function showCategory(category) {
-  const items = MENU[category].map((dish) => {
-    const li = el("li", "dish");
-    li.append(el("h3", null, dish.name), el("span", "price", formatPrice(dish.price)));
-    if (dish.desc) li.append(el("p", null, dish.desc));
-    return li;
-  });
-  dishesBox.replaceChildren(...items);
-
-  tabsBox.querySelectorAll(".tab").forEach((btn) => {
-    btn.setAttribute("aria-pressed", String(btn.dataset.category === category));
-  });
-}
-
-Object.keys(MENU).forEach((category) => {
-  const btn = el("button", "tab", category);
-  btn.type = "button";
-  btn.dataset.category = category;
-  btn.addEventListener("click", () => showCategory(category));
-  tabsBox.append(btn);
-});
-showCategory(Object.keys(MENU)[0]);
-
-/* ---------- Рестораны ---------- */
-
-// Открыт ли ресторан сейчас — по времени в часовом поясе самого ресторана.
-function isOpenNow(place) {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: place.tz || "Asia/Almaty",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23"
-  }).formatToParts(new Date());
-
-  const hours = Number(parts.find((p) => p.type === "hour").value) % 24;
-  const minutes = Number(parts.find((p) => p.type === "minute").value);
-  const now = hours * 60 + minutes;
-
-  const toMinutes = (t) => {
-    const [h, m] = t.split(":").map(Number);
-    return h * 60 + m;
+  // Хранилище (localStorage) — демо-версия без сервера
+  const ls = {
+    get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+    set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
-  const open = toMinutes(place.open);
-  const close = toMinutes(place.close);
 
-  // Если закрытие после полуночи (например, 10:00–02:00)
-  return close > open ? now >= open && now < close : now >= open || now < close;
-}
+  async function hash(pass, salt) {
+    const str = salt + ':' + pass;
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    let h = 5381; for (const c of str) h = ((h << 5) + h + c.charCodeAt(0)) | 0;
+    return String(h);
+  }
 
-function renderPlaces() {
-  const rows = LOCATIONS.map((place) => {
-    const li = el("li", "place");
+  // Уведомления
+  let tt;
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 3200);
+  }
 
-    const main = el("div");
-    main.append(el("h3", null, place.name), el("address", null, place.address));
+  // Модальное окно
+  const modal = $('#modal'), tabs = $('.tabs');
+  function setTab(name) {
+    tabs.dataset.active = name;
+    $$('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    $$('.form').forEach(f => { const on = f.dataset.f === name; f.classList.toggle('active', on); f.inert = !on; });
+    setTimeout(() => { const i = $('.form.active input'); i && i.focus(); }, 280);
+  }
+  function openModal(tab = 'login') {
+    modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; setTab(tab);
+  }
+  function closeModal() {
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  $$('[data-close]').forEach(b => b.addEventListener('click', closeModal));
+  $$('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    const info = el("div");
-    const phone = el("a", null, place.phone);
-    phone.href = "tel:" + place.phone.replace(/[^\d+]/g, "");
-    info.append(el("p", null, `Ежедневно ${place.open}–${place.close}`), phone);
+  // Ошибки полей
+  const err = (el, msg) => {
+    const f = el.closest('.field');
+    f.classList.toggle('error', !!msg);
+    $('.err', f).textContent = msg || '';
+    return !!msg;
+  };
+  const shake = form => { form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake'); };
+  $$('.field input').forEach(i => i.addEventListener('input', () => err(i, '')));
+  const okEmail = v => /^\S+@\S+\.\S+$/.test(v);
 
-    const open = isOpenNow(place);
-    const status = el("span", open ? "status" : "status status-closed", open ? "Открыто сейчас" : "Сейчас закрыто");
+  // Интерфейс в зависимости от сессии
+  function updateUI() {
+    const s = ls.get('aura_session');
+    const h = $('#hello');
+    h.hidden = !s;
+    h.textContent = s ? 'Привет, ' + s.name.split(' ')[0] + '!' : '';
+    $('#authBtn').textContent = s ? 'Выйти' : 'Войти';
+  }
+  function finish(u, isNew) {
+    ls.set('aura_session', { name: u.name, email: u.email });
+    closeModal();
+    $$('.form').forEach(f => f.reset());
+    $('.meter').style.setProperty('--s', 0);
+    updateUI();
+    toast(isNew ? 'Аккаунт создан. Добро пожаловать, ' + u.name + '!' : 'С возвращением, ' + u.name + '!');
+  }
 
-    li.append(main, info, status);
-    return li;
+  // Вход
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, q = n => f.elements[n];
+    const email = q('email').value.trim().toLowerCase();
+    let bad = err(q('email'), okEmail(email) ? '' : 'Введите корректный email');
+    bad = err(q('password'), q('password').value ? '' : 'Введите пароль') || bad;
+    if (!bad) {
+      const u = ls.get('aura_users', []).find(u => u.email === email);
+      if (u && u.hash === await hash(q('password').value, email)) return finish(u, false);
+      err(q('password'), 'Неверный email или пароль');
+    }
+    shake(f);
   });
-  $("#places").replaceChildren(...rows);
-}
-renderPlaces();
 
-/* ---------- Мобильное меню сайта ---------- */
-const header = $(".site-header");
-const burger = $(".burger");
+  // Регистрация
+  $('#regForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, q = n => f.elements[n];
+    const name = q('fullname').value.trim(), email = q('email').value.trim().toLowerCase(), p = q('password').value;
+    const bad = [
+      err(q('fullname'), name.length >= 2 ? '' : 'Минимум 2 символа'),
+      err(q('email'), okEmail(email) ? '' : 'Введите корректный email'),
+      err(q('password'), p.length >= 6 ? '' : 'Минимум 6 символов'),
+      err(q('confirm'), q('confirm').value === p ? '' : 'Пароли не совпадают')
+    ].some(Boolean);
+    if (bad) return shake(f);
+    const users = ls.get('aura_users', []);
+    if (users.some(u => u.email === email)) { err(q('email'), 'Этот email уже зарегистрирован'); return shake(f); }
+    const u = { name, email, hash: await hash(p, email) };
+    ls.set('aura_users', [...users, u]);
+    finish(u, true);
+  });
 
-function setNav(isOpen) {
-  header.classList.toggle("is-open", isOpen);
-  burger.setAttribute("aria-expanded", String(isOpen));
-}
+  // Индикатор надёжности пароля
+  $('#regForm').elements.password.addEventListener('input', e => {
+    const p = e.target.value; let s = 0;
+    if (p.length >= 6) s++;
+    if (p.length >= 10) s++;
+    if (/[A-ZА-Я]/.test(p) && /[a-zа-я]/.test(p)) s++;
+    if (/\d/.test(p) && /[^\w\s]/.test(p)) s++;
+    $('.meter').style.setProperty('--s', p ? Math.max(s, 1) : 0);
+  });
 
-burger.addEventListener("click", () => setNav(!header.classList.contains("is-open")));
-document.querySelectorAll(".nav a").forEach((link) => link.addEventListener("click", () => setNav(false)));
+  // Кнопки
+  $('#authBtn').addEventListener('click', () => {
+    if (ls.get('aura_session')) { ls.set('aura_session', null); updateUI(); toast('Вы вышли из аккаунта'); }
+    else openModal('login');
+  });
+  $('#bookBtn').addEventListener('click', () => {
+    if (!ls.get('aura_session')) { toast('Создайте аккаунт, чтобы записаться'); openModal('register'); }
+    else toast('Заявка принята — мастер скоро свяжется с вами ✂');
+  });
 
-/* ---------- Год в подвале ---------- */
-$("#year").textContent = new Date().getFullYear();
+  // Анимации при прокрутке
+  const count = el => {
+    const to = +el.dataset.count, t0 = performance.now();
+    (function step(t) {
+      const p = Math.min((t - t0) / 1600, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString('ru-RU');
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); io.unobserve(e.target);
+    if (e.target.dataset.count) count(e.target);
+  }), { threshold: .2 });
+  $$('[data-reveal],[data-count]').forEach(el => io.observe(el));
+
+  const header = $('#header');
+  addEventListener('scroll', () => header.classList.toggle('sc', scrollY > 20), { passive: true });
+
+  updateUI();
+})();
