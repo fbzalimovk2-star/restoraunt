@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Магазин — Aura</title>
+<meta name="description" content="Профессиональный уход за волосами от сети парикмахерских Aura: шампуни, маски, масла и стайлинг.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="blobs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="header" id="header">
+  <a href="index.html" class="logo"><span class="logo-mark">✂</span> Aura</a>
+  <nav class="nav">
+    <a href="index.html">Главная</a>
+    <a href="index.html#services">Услуги</a>
+    <a href="shop.html" class="shop-link">Магазин</a>
+  </nav>
+  <div class="auth-box">
+    <span class="hello" id="hello" hidden></span>
+    <button class="btn btn-ghost cart-btn" id="cartBtn" aria-label="Открыть корзину">🛍<span class="badge" id="badge" hidden>0</span></button>
+  </div>
+</header>
+
+<main class="shop">
+  <section class="section">
+    <h1 class="shop-title" data-reveal>Магазин <span class="grad">Aura</span></h1>
+    <p class="shop-sub" data-reveal>Профессиональный уход и стайлинг — те же средства, что используют наши мастера.</p>
+    <div class="chips" data-reveal>
+      <button class="chip active" data-f="all">Все</button>
+      <button class="chip" data-f="Очищение">Очищение</button>
+      <button class="chip" data-f="Уход">Уход</button>
+      <button class="chip" data-f="Стайлинг">Стайлинг</button>
+    </div>
+    <div class="grid prods" id="products"></div>
+  </section>
+</main>
+
+<footer class="footer">© 2026 Aura — сеть парикмахерских</footer>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-label="Корзина">
+  <div class="drawer-head"><h2>Корзина</h2><button class="close" id="closeCart" aria-label="Закрыть">×</button></div>
+  <ul class="items" id="items"></ul>
+  <div class="drawer-foot">
+    <div class="sum"><span>Итого</span><b id="total">0 ₽</b></div>
+    <button class="btn btn-primary wide" id="checkout" disabled>Оформить заказ</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="shop.js"></script>
+</body>
+</html>
