@@ -223,3 +223,51 @@ h1,h2,h3{line-height:1.2}
 .card{box-shadow:0 6px 24px #0000000f}
 .toast{color:#fff}
 .qty button:hover,.rm:hover{background:#111;border-color:#111;color:#fff}
+
+/* карточка товара */
+.prod{cursor:pointer}
+.pp{position:fixed;inset:0;z-index:35;overflow:auto;background:linear-gradient(115deg,#fff,#f1f1f3 55%,#fff);opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
+.pp.open{opacity:1;visibility:visible;transition-delay:0s}
+.pp-open{overflow:hidden}
+.pp-open .header{z-index:38}
+.pp-in{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;max-width:1080px;min-height:100%;margin:auto;padding:90px 5vw 40px}
+.pp-art{display:flex;flex-direction:column;align-items:center}
+#ppBottle{height:min(62vh,520px);aspect-ratio:5/7;cursor:grab;touch-action:none;user-select:none}
+#ppBottle:active{cursor:grabbing}
+#ppBottle svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+.hint{margin-top:14px;font-size:.8rem;color:var(--muted)}
+.pp.open .pp-info{animation:rise .6s .1s both}
+.back{margin-bottom:18px;padding:6px 0;border:0;background:none;color:var(--text);font:inherit;cursor:pointer}
+.back:hover{text-decoration:underline}
+.pp-cat{color:var(--muted)}
+.pp-info h2{margin:4px 0 6px;font-size:clamp(1.8rem,4vw,2.6rem)}
+.pp-tag{max-width:46ch;color:var(--muted);font-size:1.1rem}
+.pp-price{margin:16px 0 20px;font-size:1.6rem;font-weight:700}
+.pp-price s{margin-left:10px;color:var(--muted);font-size:1rem;font-weight:400}
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;border:0}
+.sizes legend{margin-bottom:8px;font-weight:700}
+.sz{position:relative;display:flex;justify-content:space-between;padding:14px 16px;border:1px solid #0000003a;border-radius:12px;background:#fff;cursor:pointer;transition:.2s}
+.sz input{position:absolute;opacity:0;pointer-events:none}
+.sz b{color:var(--muted);font-weight:500}
+.sz:hover{border-color:#000}
+.sz:has(input:checked){border-color:#000;box-shadow:0 0 0 1px #000}
+.sz:has(input:focus-visible){outline:2px solid #000;outline-offset:2px}
+.pp-buy{display:flex;gap:12px}
+.pp-buy .btn{flex:1}
+.stepper{display:flex;align-items:center;border:1px solid #0000003a;border-radius:12px;background:#fff}
+.stepper button{width:44px;height:100%;border:0;background:none;font-size:1.2rem;cursor:pointer;border-radius:12px;transition:background .2s}
+.stepper button:hover{background:#0000000a}
+.stepper span{min-width:28px;text-align:center}
+.ship{display:grid;gap:2px;margin:20px 0 24px;font-size:.9rem}
+.ship div{display:flex;gap:8px}
+.ship dt{font-weight:700}
+.ship dd{color:var(--muted)}
+.acc details{border-bottom:1px solid #0000001a}
+.acc details:first-child{border-top:1px solid #0000001a}
+.acc summary{display:flex;justify-content:space-between;padding:16px 0;font-weight:700;cursor:pointer;list-style:none}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";transition:transform .3s}
+.acc details[open] summary::after{content:"−"}
+.dbody{padding-bottom:16px;color:#333;animation:rise .4s both}
+.dbody ul{padding-left:20px}
+@media(max-width:820px){.pp-in{grid-template-columns:1fr;gap:20px;padding-top:80px}#ppBottle{height:42vh}}
