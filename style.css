@@ -172,7 +172,7 @@ h1,h2,h3{line-height:1.2}
 .cut-img img{width:100%;height:100%;object-fit:cover}
 .hair{fill:var(--h);transform-box:fill-box;transform-origin:50% 100%;animation:sway 4s ease-in-out infinite}
 .hair.fade{opacity:.4;animation:none}
-.skin{fill:#f0c8a4}.cloth{fill:#3a3a3c}
+.skin{fill:var(--sk,#f0c8a4)}.cloth{fill:#3a3a3c}
 @keyframes sway{50%{transform:rotate(1.6deg) scaleY(1.025)}}
 .btn:disabled{opacity:.6;cursor:wait;transform:none}
 
@@ -271,3 +271,15 @@ h1,h2,h3{line-height:1.2}
 .dbody{padding-bottom:16px;color:#333;animation:rise .4s both}
 .dbody ul{padding-left:20px}
 @media(max-width:820px){.pp-in{grid-template-columns:1fr;gap:20px;padding-top:80px}#ppBottle{height:42vh}}
+
+/* галерея стрижек: 12 образов и примерка цвета */
+.cut{--h:var(--tint,var(--h0))}
+.hair{transition:fill .7s}
+.hair.shine{fill:url(#shine);pointer-events:none}
+.feat ellipse{fill:#2a1f1a}
+.swatches{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:-8px 0 30px}
+.sw-l{margin-right:6px;color:var(--muted);font-size:.95rem}
+.sw{width:30px;height:30px;border:2px solid #fff;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px #0004;cursor:pointer;transition:transform .35s cubic-bezier(.3,1.8,.5,1),box-shadow .3s}
+.sw[data-c=""]{background:conic-gradient(#4a2c1e,#b0503c,#e0b45a,#9a7bd0,#2b2b2e,#4a2c1e)}
+.sw:hover{transform:scale(1.18)}
+.sw.on{transform:scale(1.25);box-shadow:0 0 0 2px #000}
