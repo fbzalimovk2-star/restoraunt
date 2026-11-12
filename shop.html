@@ -50,6 +50,26 @@
   </div>
 </aside>
 
+<div class="pp" id="pp" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="ppName">
+  <div class="pp-in">
+    <div class="pp-art"><div id="ppBottle"></div><p class="hint">Потяните, чтобы повернуть</p></div>
+    <div class="pp-info">
+      <button class="back" id="ppBack">‹ Назад в магазин</button>
+      <div class="pp-cat" id="ppCat"></div>
+      <h2 id="ppName"></h2>
+      <p class="pp-tag" id="ppTag"></p>
+      <div class="pp-price" id="ppPrice"></div>
+      <fieldset class="sizes" id="ppSizes"></fieldset>
+      <div class="pp-buy">
+        <div class="stepper"><button id="qMinus" aria-label="Меньше">−</button><span id="qVal">1</span><button id="qPlus" aria-label="Больше">+</button></div>
+        <button class="btn btn-primary" id="ppAdd">В корзину</button>
+      </div>
+      <dl class="ship"><div><dt>Доставка:</dt><dd>Бесплатно, 2–3 дня</dd></div><div><dt>Самовывоз:</dt><dd>Сегодня в большинстве салонов</dd></div></dl>
+      <div class="acc" id="ppAcc"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status"></div>
 <script src="shop.js"></script>
 </body>
