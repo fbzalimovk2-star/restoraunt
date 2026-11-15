@@ -283,3 +283,7 @@ h1,h2,h3{line-height:1.2}
 .sw[data-c=""]{background:conic-gradient(#4a2c1e,#b0503c,#e0b45a,#9a7bd0,#2b2b2e,#4a2c1e)}
 .sw:hover{transform:scale(1.18)}
 .sw.on{transform:scale(1.25);box-shadow:0 0 0 2px #000}
+
+/* фото в галерее стрижек */
+.cut-img img{object-position:50% 25%;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.cut:hover .cut-img img{transform:scale(1.07)}
